@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JARVIS AI</title>
+  <style>
+    body {
+      background: #07111f;
+      color: #00ffcc;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 { margin-top: 60px; }
+    button {
+      padding: 15px 25px;
+      margin: 10px;
+      border-radius: 10px;
+      border: 1px solid #00ffcc;
+      background: #10283a;
+      color: #00ffcc;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>J.A.R.V.I.S</h1>
+  <p>Your Personal AI Assistant</p>
+  <button onclick="startJarvis()">🎤 Talk to Jarvis</button>
+  <p id="answer">Hello! I am Jarvis.</p>
+
+  <script>
+    function startJarvis() {
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        document.getElementById("answer").textContent =
+          "Please open Jarvis in Chrome.";
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-IN";
+
+      recognition.onresult = function(event) {
+        const command =
+          event.results[0][0].transcript.toLowerCase();
+
+        let reply = "Sorry, I don't understand that command.";
+
+        if (command.includes("hello")) {
+          reply = "Hello Sir! Jarvis is ready.";
+        } else if (command.includes("time")) {
+          reply = "The time is " + new Date().toLocaleTimeString();
+        } else if (command.includes("date")) {
+          reply = "Today's date is " + new Date().toLocaleDateString();
+        } else if (command.includes("your name")) {
+          reply = "My name is Jarvis, your personal assistant.";
+        } else if (command.includes("open youtube")) {
+          reply = "Opening YouTube.";
+          window.open("https://www.youtube.com", "_blank");
+        }
+
+        document.getElementById("answer").textContent = reply;
+
+        const speech = new SpeechSynthesisUtterance(reply);
+        speech.lang = "en-IN";
+        speechSynthesis.speak(speech);
+      };
+
+      recognition.start();
+      document.getElementById("answer").textContent =
+        "Listening... Speak now!";
+    }
+  </script>
+</body>
+</html>
